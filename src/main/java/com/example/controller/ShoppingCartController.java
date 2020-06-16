@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,8 +39,9 @@ public class ShoppingCartController {
 
 		// カート内の合計金額をrequestスコープに格納
 		Integer totalPrice = 0;
-		if (!Objects.isNull(session.getAttribute("itemCart"))) {
-			for (Item item : (List<Item>) session.getAttribute("itemCart")) {
+		List<Item> itemCart = (List<Item>) session.getAttribute("itemCart");
+		if (!Objects.isNull(itemCart)) {
+			for (Item item : itemCart) {
 				totalPrice += item.getPrice();
 			}
 		}
@@ -56,13 +56,13 @@ public class ShoppingCartController {
 		Item addedItem = itemList.get(index);
 
 		// 取得した商品をカートに詰める
-		List<Item> itemCart;
-		if (Objects.isNull(session.getAttribute("itemCart"))) {
-			itemCart = new LinkedList<Item>();
-		} else {
-			itemCart = (List<Item>) session.getAttribute("itemCart");
+		List<Item> itemCart = (List<Item>) session.getAttribute("itemCart");
+		if (Objects.isNull(itemCart)) {
+			itemCart = new ArrayList<Item>();
 		}
 		itemCart.add(addedItem);
+
+		// 対象商品を追加したリストをセッションスコープに戻す
 		session.setAttribute("itemCart", itemCart);
 		return index(model);
 	}
