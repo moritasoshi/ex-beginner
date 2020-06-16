@@ -5,21 +5,23 @@
 <title>Title</title>
 </head>
 <body>
-<div class="test1">
-	<h4>商品一覧</h4>
-		<form th:action="@{/ex06/add}" method="post">
-		<span th:text="name">手帳</span>  
-		<span th:text="price">1000</span>円  
-		<button>カートへ</button>
+	<div class="test1">
+		<h4>商品一覧</h4>
+		<form th:each="item, status : ${application.itemList}" th:action="@{'/ex06/in-cart?index='+${status.index}}" method="post">
+			<span th:text="${item.name}">手帳</span> <span th:text="${item.price}">1000</span>円
+			<button>カートへ</button>
 		</form>
-</div>
-<div class="test2">
-	<h4>ショッピングカート</h4>
-		<form th:action="@{/ex06/delete}" method="post">
-		<span th:text="name">手帳</span>  
-		<span th:text="price">1000</span>円  
-		<button>削除</button>
+	</div>
+	<div class="test2">
+		<h4>ショッピングカート</h4>
+		<form th:each="item, status : ${session.itemCart}" th:action="@{'/ex06/delete?index='+${status.index}}" method="post">
+			<span th:text="${item.name}">手帳</span> <span th:text="${item.price}">1000</span>円
+			<button>削除</button>
 		</form>
-</div>
+	</div>
+	<div class="test3">
+		<h4>合計金額</h4>
+		<span th:text="${totalPrice}">dammy</span>円
+	</div>
 </body>
 </html>

@@ -1,5 +1,10 @@
 package com.example.controller;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -16,62 +21,62 @@ public class ShoppingCartController {
 
 	@Autowired
 	private ServletContext application;
+	@Autowired
 	private HttpSession session;
 
 	@RequestMapping("")
 	public String index(Model model) {
 		// applicationスコープに商品一覧を格納
-		Item item1 = new Item();
-		item1.setName("手帳ノート");
-		item1.setPrice(1000);
-		Item item2 = new Item();
-		item2.setName("文房具セット");
-		item2.setPrice(1500);
-		Item item3 = new Item();
-		item3.setName("ファイル");
-		item3.setPrice(2000);
+		Item item1 = new Item("手帳ノート", 1000);
+		Item item2 = new Item("文房具セット", 1500);
+		Item item3 = new Item("ファイル", 2000);
 
-		application.setAttribute("item1", item1);
-		application.setAttribute("item2", item2);
-		application.setAttribute("item3", item3);
+		List<Item> itemList = new ArrayList<>();
+		itemList.add(0, item1);
+		itemList.add(1, item2);
+		itemList.add(2, item3);
 
-		// sessionスコープ内の商品一覧の合計金額をrequestスコープに格納
+		application.setAttribute("itemList", itemList);
 
+		// カート内の合計金額をrequestスコープに格納
 		Integer totalPrice = 0;
+		if (!Objects.isNull(session.getAttribute("itemCart"))) {
+			for (Item item : (List<Item>) session.getAttribute("itemCart")) {
+				totalPrice += item.getPrice();
+			}
+		}
 		model.addAttribute("totalPrice", totalPrice);
-
 		return "item-and-cart";
 	}
 
 	@RequestMapping("/in-cart")
 	public String inCart(Integer index, Model model) {
-		switch (index) {
-		case 1:
-			session.setAttribute("item1", application.getAttribute("item1"));
-			return index(model);
-		case 2:
-			session.setAttribute("item2", application.getAttribute("item2"));
-			return index(model);
-		case 3:
-			session.setAttribute("item3", application.getAttribute("item3"));
-			return index(model);
+		// カートに追加したい商品をアプリケーションスコープから取得
+		List<Item> itemList = (List<Item>) application.getAttribute("itemList");
+		Item addedItem = itemList.get(index);
+
+		// 取得した商品をカートに詰める
+		List<Item> itemCart;
+		if (Objects.isNull(session.getAttribute("itemCart"))) {
+			itemCart = new LinkedList<Item>();
+		} else {
+			itemCart = (List<Item>) session.getAttribute("itemCart");
 		}
+		itemCart.add(addedItem);
+		session.setAttribute("itemCart", itemCart);
 		return index(model);
 	}
 
 	@RequestMapping("/delete")
 	public String delete(Integer index, Model model) {
-		switch (index) {
-		case 1:
-			session.removeAttribute("item1");
-			return index(model);
-		case 2:
-			session.removeAttribute("item2");
-			return index(model);
-		case 3:
-			session.removeAttribute("item3");
-			return index(model);
-		}
+		// セッションスコープからカートのリストを取得
+		List<Item> itemCart = (List<Item>) session.getAttribute("itemCart");
+
+		// リストから対象商品を削除
+		itemCart.remove((int) index);
+
+		// 対象商品を削除したリストをセッションスコープに戻す
+		session.setAttribute("itemCart", itemCart);
 		return index(model);
 	}
 
