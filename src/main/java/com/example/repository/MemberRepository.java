@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import com.example.domain.Member;
 
 public class MemberRepository {
+	
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
