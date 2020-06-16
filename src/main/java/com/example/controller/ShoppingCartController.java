@@ -1,8 +1,5 @@
 package com.example.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -12,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Item;
-import com.example.domain.Member;
 
 @Controller
 @RequestMapping("/ex06")
@@ -58,6 +54,22 @@ public class ShoppingCartController {
 			return index(model);
 		case 3:
 			session.setAttribute("item3", application.getAttribute("item3"));
+			return index(model);
+		}
+		return index(model);
+	}
+
+	@RequestMapping("/delete")
+	public String delete(Integer index, Model model) {
+		switch (index) {
+		case 1:
+			session.removeAttribute("item1");
+			return index(model);
+		case 2:
+			session.removeAttribute("item2");
+			return index(model);
+		case 3:
+			session.removeAttribute("item3");
 			return index(model);
 		}
 		return index(model);
