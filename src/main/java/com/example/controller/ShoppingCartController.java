@@ -17,7 +17,7 @@ import com.example.domain.Member;
 @Controller
 @RequestMapping("/ex06")
 public class ShoppingCartController {
-	
+
 	@Autowired
 	private ServletContext application;
 	private HttpSession session;
@@ -34,24 +34,33 @@ public class ShoppingCartController {
 		Item item3 = new Item();
 		item3.setName("ファイル");
 		item3.setPrice(2000);
-		
-		List<Item> itemList = new ArrayList<>();
-		itemList.add(item1);
-		itemList.add(item2);
-		itemList.add(item3);
-		application.setAttribute("itemList", itemList);
-		
+
+		application.setAttribute("item1", item1);
+		application.setAttribute("item2", item2);
+		application.setAttribute("item3", item3);
+
 		// sessionスコープ内の商品一覧の合計金額をrequestスコープに格納
-		
+
 		Integer totalPrice = 0;
 		model.addAttribute("totalPrice", totalPrice);
-		
+
 		return "item-and-cart";
 	}
 
 	@RequestMapping("/in-cart")
-	public String inCart(String input, Model model) {
-		return "";
+	public String inCart(Integer index, Model model) {
+		switch (index) {
+		case 1:
+			session.setAttribute("item1", application.getAttribute("item1"));
+			return index(model);
+		case 2:
+			session.setAttribute("item2", application.getAttribute("item2"));
+			return index(model);
+		case 3:
+			session.setAttribute("item3", application.getAttribute("item3"));
+			return index(model);
+		}
+		return index(model);
 	}
 
 }
