@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<h4>検索結果</h4>
+<span th:each="member : ${memberList}">
+	<span th:text="${member.name}">テスト</span><br>
+</span>
+</body>
+</html>
