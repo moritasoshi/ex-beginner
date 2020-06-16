@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+<h4>ユーザー情報</h4>
+<span th:object="${user}">
+	名前：<span th:text="*{name}"></span>
+	年齢：<span th:text="*{age}"></span>
+	コメント：<span th:text="*{comment}"></span>
+</span>
+</body>
+</html>
