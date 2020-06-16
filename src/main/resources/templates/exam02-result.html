@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ex01-result</title>
+</head>
+<body>
+<h4>足し算結果画面</h4>
+<div>
+<span th:text="${firstNum}">1</span> + 
+<span th:text="${secondNum}">2</span> = 
+<span th:text="${answer}">3</span>
+</div>
+<a href="@{/ex02/to-next}">次へ</a>
+</body>
+</html>
